@@ -4,63 +4,70 @@
       <a class="navbar-brand">GranolaGram</a>
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Launch demo modal
+        POST
       </button>
-      
+     
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              <h5 class="modal-title" id="exampleModalLabel">GranolaGram</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body">
-              <input type="text" user name>
-              <input type="text" caption>
-              <input type="text" img>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            <form @submit.prevent="createGram(gram)">
+              <div class="modal-body">
+                <label for="username">username</label>
+                <input type="text" name="username" v-model="gram.user">
+                <label for="caption">caption</label>
+                <input type="text" name="caption" v-model="gram.caption">
+                <label for="img">img</label>
+                <input type="link" name="img" v-model="gram.img">
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </nav>
-
+    <gramtemplate></gramtemplate>
 
   </div>
 </template>
 
 <script>
   import Userprofile from "./Userprofile.vue"
+  import gramtemplate from "./gram.vue"
   export default {
     name: 'HelloWorld',
     data() {
       return {
-        newUserData: {}
+        gram: {}
       }
     },
     methods: {
-      updateUser() {
-        this.$store.dispatch("updateUser", this.newUserData)
+      createGram(gram) {
+        console.log(gram)
+        this.$store.dispatch('createGram', gram)
       }
     },
     computed: {
       user() {
         return this.$store.state.user
       },
-      grams() {
-        return this.$store.state.grams
-      },
+    
       tidbits() {
         return this.$store.state.tidbits
       },
 
 
+    },
+    components:{
+      gramtemplate
     }
   }
 </script>

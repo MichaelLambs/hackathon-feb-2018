@@ -9,7 +9,7 @@
 export default {
   name: 'App',
   mounted(){
-    //this.$store.dispatch("getGrams")
+    this.$store.dispatch("getGrams")
   }
 }
 </script>
