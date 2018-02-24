@@ -6,7 +6,7 @@
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
         POST
       </button>
-     
+
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -27,14 +27,16 @@
                 <input type="link" name="img" v-model="gram.img">
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </nav>
-    <gramtemplate></gramtemplate>
+    <div class="list-group" v-for="gram in grams">
+    <gramtemplate :gramProp="gram"></gramtemplate>
+    </div>
 
   </div>
 </template>
@@ -59,14 +61,16 @@
       user() {
         return this.$store.state.user
       },
-    
+      grams() {
+        return this.$store.state.grams
+      },
       tidbits() {
         return this.$store.state.tidbits
       },
 
 
     },
-    components:{
+    components: {
       gramtemplate
     }
   }

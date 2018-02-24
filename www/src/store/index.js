@@ -16,17 +16,20 @@ export default new vuex.Store({
         },
         //dummy data
         grams: [],
-        tidbits: []
+        tidbits: {}
     },
     mutations: {
         setGram(state, payload) {
-            console.log("muts")
+            console.log("gram mutations")
+            state.grams.unshift(payload)
+        },
+        setGrams(state, payload) {
             state.grams = payload
         },
-        setGrams(state, payload){
-            state.grams = payload
+        setTidbits(state, payload) {
+            // state.tidbits[payload.id] = payload.data
+            vue.set(state.tidbits, payload.id, payload.data)
         }
-
     },
     actions: {
         createGram({ commit, dispatch }, payload) {
@@ -36,13 +39,28 @@ export default new vuex.Store({
                     commit("setGram", payload)
                 })
         },
-        getGrams({commit, dispatch }, payload) {
+        getGrams({ commit, dispatch }, payload) {
             api.get("home")
-                .then(result=>{
+                .then(result => {
                     console.log(result)
                     commit("setGrams", result.data)
                 })
-                .catch(err=>{console.log(err)})
+                .catch(err => { console.log(err) })
+        },
+        getTidbits({ commit, dispatch }, payload) {
+            api.get("grams/" + payload + "/tidbits")
+                .then(result => {
+                    console.log(result)
+                    commit("setTidbits", { id: payload, data: result.data })
+                })
+                .catch(err => { console.log(err) })
+        },
+        createTidbit({ commit, dispatch }, payload) {
+            debugger
+            api.post("tidbits", payload)
+                .then(result => {
+                    dispatch("getTidbits", payload.gramId)
+                })
         }
     }
 })

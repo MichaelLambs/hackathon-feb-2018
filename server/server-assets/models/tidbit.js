@@ -5,6 +5,7 @@ var schemaName = 'Tidbit'
 
 var schema = new Schema({
     user: {type: String, required: true},
+    portrait: {type: String, default: 'http://flathash.com/'},
     content: {type: String, required: true},
     date: {type: Date, required: true, default: Date.now()},
     gramId: {type: ObjectId, ref: 'Gram', required: true}
