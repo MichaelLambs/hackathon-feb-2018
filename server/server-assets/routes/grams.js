@@ -44,8 +44,9 @@ router.post('/granolagram/home', (req, res, next) => {
 
 // EDIT A GRAM BY ID
 router.put('/granolagram/grams/:id', (req, res, next) => {
-    Grams.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(gram => {
+    Grams.findByIdAndUpdate(req.params.id, req.body)
+    .then(gram => {
+        debugger
             return res.send(gram)
         })
         .catch(next)

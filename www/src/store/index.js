@@ -29,6 +29,9 @@ export default new vuex.Store({
         setTidbits(state, payload) {
             // state.tidbits[payload.id] = payload.data
             vue.set(state.tidbits, payload.id, payload.data)
+        },
+        setLikes(state, payload) {
+            state.grams
         }
     },
     actions: {
@@ -36,6 +39,7 @@ export default new vuex.Store({
             console.log("action")
             api.post("home", payload)
                 .then(results => {
+                    debugger
                     commit("setGram", payload)
                 })
         },
@@ -56,11 +60,31 @@ export default new vuex.Store({
                 .catch(err => { console.log(err) })
         },
         createTidbit({ commit, dispatch }, payload) {
-            debugger
             api.post("tidbits", payload)
                 .then(result => {
                     dispatch("getTidbits", payload.gramId)
                 })
+        },
+        deleteTidbit({ commit, dispatch }, payload) {
+            api.delete("tidbits/" + payload._id)
+                .then(result => {
+                    dispatch("getTidbits", payload.gramId)
+                })
+        },
+        deleteGram({ commit, dispatch }, payload) {
+            api.delete("grams/" + payload._id)
+                .then(result => {
+                    dispatch("getGrams", payload)
+                })
+        },
+        addLike({ commit, dispatch }, payload) {
+
+            payload.like++
+            api.put('grams/' + payload._id, payload)
+                .then(result => {
+                    commit("setLikes", result.data.like)
+                })
+
         }
     }
 })

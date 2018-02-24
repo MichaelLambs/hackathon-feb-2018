@@ -1,10 +1,11 @@
 <template>
   <div class="home">
-    <nav class="navbar navbar-light bg-light justify-content-between">
-      <a class="navbar-brand">GranolaGram</a>
+    <nav class="navbar navbar-light justify-content-between">
+      <img src="../assets/logo.jpg" height="200">
+      <input type="text" v-model="query" placeholder="look up grams by user">
       <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        POST
+      <button type="button" class="btn btn-lg btn-nav" data-toggle="modal" data-target="#exampleModal">
+        <b>POST</b>
       </button>
 
       <!-- Modal -->
@@ -19,36 +20,37 @@
             </div>
             <form @submit.prevent="createGram(gram)">
               <div class="modal-body">
-                <label for="username">username</label>
-                <input type="text" name="username" v-model="gram.user">
-                <label for="caption">caption</label>
-                <input type="text" name="caption" v-model="gram.caption">
-                <label for="img">img</label>
-                <input type="link" name="img" v-model="gram.img">
+                <input type="link" name="img" v-model="gram.img" placeholder="Image URL">
+                <input type="text" name="username" v-model="gram.user" placeholder="Username">
+                <input type="text" name="caption" v-model="gram.caption" placeholder="Gram Caption">
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </nav>
-    <div class="list-group" v-for="gram in grams">
-    <gramtemplate :gramProp="gram"></gramtemplate>
+    <div class="granola-holder">
+      <div class="container">
+        <div class="list-group" v-for="gram in filterGrams">
+          <gramtemplate :gramProp="gram"></gramtemplate>
+        </div>
+      </div>
     </div>
-
   </div>
 </template>
 
 <script>
-  import Userprofile from "./Userprofile.vue"
   import gramtemplate from "./gram.vue"
   export default {
     name: 'HelloWorld',
     data() {
       return {
-        gram: {}
+        gram: {},
+        query: ''
       }
     },
     methods: {
@@ -64,6 +66,11 @@
       grams() {
         return this.$store.state.grams
       },
+      filterGrams(){
+        return this.query.length>2? this.grams.filter(g=>
+          g.user.toLowerCase().indexOf(this.query.toLowerCase()) > -1
+        ): this.grams
+      },
       tidbits() {
         return this.$store.state.tidbits
       },
@@ -77,5 +84,16 @@
 </script>
 
 <!--  Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
+nav {
+  background-color: #22244b;
+}
+.btn-nav {
+  background-color: #3e91d6;
+  color: white
+}
+.granola-holder{
+  margin-top: 1rem;
+}
+
 </style>
