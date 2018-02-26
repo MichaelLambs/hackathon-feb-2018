@@ -1,8 +1,7 @@
 <template>
     <div>
-        <div class="flexor border-grey">
-            <div class="mar-right">
-                
+        <div class="flexor mar-bottom border-grey">
+            <div class="mar-right">    
                 <img v-bind:src="gramProp.img" class="gram-img">
                 <div class="margin-top">
                     <button @click="addLike(gramProp)" class="btn btn-lg"><i class="fas fa-1x fa-arrow-circle-up"></i> <b>{{gramProp.like}}</b></button>
@@ -10,32 +9,35 @@
                 </div>
             </div>
             <div class="comments-holder">
-                <div>
-                        <h4>
-                                <b>{{gramProp.user}}</b> {{gramProp.caption}}</h4>
+                <div class="caption-box">
+                    <h3><em><b class="username">{{gramProp.user}}:</b></em> {{gramProp.caption}}</h3>
                 </div>
-                <div class="list-group" v-for="tidbit in tidbits">
-                    <div class="flexor border-grey">
-                        <div class="flexor">
-                            <img v-bind:src="tidbit.portrait + tidbit.user" height="40">
-                            <h4 class="mar-right comment-text"><b>{{tidbit.user}}:</b> {{tidbit.content}}</h4>
-                        </div>
-                        <div>
+                <transition-group name="bounce"
+                    enter-active-class="animated bounceInRight"
+                    leave-active-class="animated bounceOut"
+                >
+                    <div v-if="show" :key="tidbit._id" :class="{'list-group' : listGroup}" v-for="tidbit in tidbits">
+                        <div class="flexor border-grey">
+                            <div class="flexor">
+                                <img class="mar-right-2" v-bind:src="tidbit.portrait + tidbit.user" height="40">
+                                <h5 class="comment-text"><b>{{tidbit.user}}:</b> {{tidbit.content}}</h5>
+                            </div>
+                            <div>
                                 <i @click="deleteTidbit(tidbit)" class="fas red fa-minus-circle"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <form @submit.prevent="createTidbit(tidbit)">
-                    <input type="text" placeholder="Username" v-model="tidbit.user">
-                    <input type="text" placeholder="What's your Tidbit?" v-model="tidbit.content">
-                    <button type="submit" class="btn btn-lg"><b>post</b></button>
+                </transition-group>
+                <form class="tidbit-post" @submit.prevent="createTidbit(tidbit)">
+                    <input type="text" placeholder=" Username" v-model="tidbit.user">
+                    <input type="text" class="tidbit-post-large-input" placeholder=" What's your Tidbit?" v-model="tidbit.content">
+                    <button type="submit" class="btn"><b>add tidbit</b></button>
                 </form>
             </div>
             <div>
                     <i @click="deleteGram(gramProp)" class="mar-left far grey fa-times-circle"></i>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -47,7 +49,9 @@
             return {
                 tidbit: {
                     gramId: ''
-                }
+                },
+                listGroup: true,
+                show: false,
             }
         },
         computed: {
@@ -64,6 +68,11 @@
         methods: {
             getTidbits(gramId) {
                 this.$store.dispatch("getTidbits", gramId)
+                if(this.show == false){
+                    this.show = true
+                } else {
+                    this.show = false
+                }
             },
             createTidbit(data) {
                 data.gramId = this.gramProp._id
@@ -101,7 +110,7 @@
     }
     .flexor {
         display: flex;
-        margin-bottom: 1rem;
+        margin-bottom: .3rem;
         padding: .5rem;
         border-radius: 10px;
         justify-content: space-between
@@ -109,16 +118,24 @@
     .comments-holder{
         align-self: center;
         padding: .5rem;
-        border: .1rem solid #eee;
+        width: 100%;
+        /* border: .1rem solid #eee; */
     }
     .mar-right{
         margin-right: 1rem;
     }
+    .mar-right-2{
+        margin-right: .3rem;
+    }
     .margin-top{
         margin-top: 1rem;
     }
+    .mar-bottom{
+        margin-bottom: 2rem;
+    }
     .comment-text{
-        align-self: center
+        align-self: center;
+        margin-bottom: 0;
     }
     .red {
         color: rgba(255, 68, 0, 0.452);
@@ -138,5 +155,30 @@
     }
     .mar-left{
         margin-left: 1rem;
+    }
+    .tidbit-post input{
+        border-radius: 10px;
+        height: 2.5rem;
+    }
+    .tidbit-post{
+        display: flex;
+        justify-content: space-between;
+    }
+    .tidbit-post-large-input{
+        flex-grow: 2;
+    }
+    .username{
+        color: #3e91d6;
+    }
+    .caption-box{
+        margin-bottom: 1rem;
+        border-left: 6px solid #3e91d6;
+        padding-left: .6rem;
+    }
+
+    @media screen and (max-width: 1220px) {
+        .tidbit-post{
+            flex-direction: column;
+        }
     }
 </style>

@@ -1,32 +1,44 @@
 <template>
   <div class="home">
     <nav class="navbar navbar-light justify-content-between">
-      <img src="../assets/logo.jpg" height="200">
-      <input type="text" v-model="query" placeholder="look up grams by user">
+      <img src="../assets/logo2.jpg" height="200">
+      <div class="search-box">
+        <h4>Search:</h4>
+        <input type="text" v-model="query" placeholder=" Look up grams by user!">
+      </div>
       <!-- Button trigger modal -->
-      <button type="button" class="btn btn-lg btn-nav" data-toggle="modal" data-target="#exampleModal">
+      <button type="button" class="btn location-bottom btn-lg btn-nav" data-toggle="modal" data-target="#exampleModal">
         <b>POST</b>
       </button>
 
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">GranolaGram</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <img src="../assets/logo2.jpg" height="175">
+              <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </button> -->
             </div>
             <form @submit.prevent="createGram(gram)">
               <div class="modal-body">
-                <input type="link" name="img" v-model="gram.img" placeholder="Image URL">
-                <input type="text" name="username" v-model="gram.user" placeholder="Username">
-                <input type="text" name="caption" v-model="gram.caption" placeholder="Gram Caption">
+                  <div>
+                      <i class="fas mar-right fa-1x fa-user"></i>
+                      <input type="text" name="username" v-model="gram.user" placeholder=" Username" required>
+                    </div>
+                <div>
+                    <i class="far mar-right fa-1x fa-image"></i>
+                  <input type="link" name="img" v-model="gram.img" placeholder=" Image URL" required>
+                </div>
+                <div>
+                    <i class="far mar-right fa-1x fa-edit"></i>
+                  <input type="text" name="caption" v-model="gram.caption" placeholder=" Gram Caption">
+                </div>
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-lg btn-primary"><b>post gram</b></button>
+                <button type="button" class="btn btn-lg btn-secondary" data-dismiss="modal"><b>close</b></button>
               </div>
             </form>
           </div>
@@ -57,6 +69,8 @@
       createGram(gram) {
         console.log(gram)
         this.$store.dispatch('createGram', gram)
+        this.gram = {}
+        $('#exampleModal').modal('hide')
       }
     },
     computed: {
@@ -88,12 +102,40 @@
 nav {
   background-color: #22244b;
 }
+.search-box{
+  flex-basis: 25%;
+  color: white;
+}
+.search-box input {
+  height: 2.5rem;
+  border-radius: 10px;
+  width: 100%;
+}
 .btn-nav {
   background-color: #3e91d6;
   color: white
 }
 .granola-holder{
   margin-top: 1rem;
+}
+.modal-body input{
+  width: 90%;
+  margin:.2rem 0;
+  border-radius: 10px;
+  height: 2.5rem;
+}
+.mar-right{
+  margin-right: .5rem
+}
+.modal-header{
+  background-color: #22244b;
+}
+.modal-header img{
+  margin: auto;
+}
+
+.location-bottom {
+  justify-self: flex-end;
 }
 
 </style>
