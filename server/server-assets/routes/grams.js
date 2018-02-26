@@ -35,6 +35,7 @@ router.get('/granolagram/grams/:gramId/tidbits', (req, res, next) => {
 
 // CREATE A GRAM
 router.post('/granolagram/home', (req, res, next) => {
+    req.body.userId = req.session.uid // GIVES GRAM YOUR USER ID
     Grams.create(req.body)
         .then(gram => {
             res.send(gram)

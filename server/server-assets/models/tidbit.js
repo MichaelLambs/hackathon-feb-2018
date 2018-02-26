@@ -8,7 +8,8 @@ var schema = new Schema({
     portrait: {type: String, default: 'http://flathash.com/'},
     content: {type: String, required: true},
     date: {type: Date, required: true, default: Date.now()},
-    gramId: {type: ObjectId, ref: 'Gram', required: true}
+    gramId: {type: ObjectId, ref: 'Gram', required: true},
+    userId: {type: ObjectId, ref: 'User'}
 })
 
 module.exports = mongoose.model(schemaName, schema)

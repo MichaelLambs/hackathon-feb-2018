@@ -79,6 +79,12 @@ export default new vuex.Store({
                 .then(result => {
                     dispatch('getGrams', payload)
                 })
+        },
+        createUser({commit, dispatch}, payload) {
+            api.post("auth/register", payload)
+                .then(result => {
+                    console.log("created user")
+                })
         }
     }
 })

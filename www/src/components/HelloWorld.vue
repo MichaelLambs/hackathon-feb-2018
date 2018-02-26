@@ -3,14 +3,48 @@
     <nav class="navbar navbar-light justify-content-between">
       <img src="../assets/logo2.jpg" height="200">
       <div class="search-box">
+        <h3>{{createdUser.username}}</h3>
         <h4>Search:</h4>
         <input type="text" v-model="query" placeholder=" Look up grams by user!">
+      </div>
+      <!-- button to login -->
+      <!-- Button trigger login modal -->
+      <button type="button" class="btn location-bottom btn-lg btn-nav" data-toggle="modal" data-target="#exampleModal">
+        <b>Login</b>
+      </button>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <img src="../assets/logo2.jpg" height="175">
+            </div>
+            <form @submit.prevent="createUser(createdUser)">
+              <div class="modal-body">
+                  <div>
+                      <i class="fas mar-right fa-1x fa-user"></i>
+                      <input type="text" name="username" v-model="createdUser.createdUser" placeholder=" Username" required>
+                    </div>
+                <div>
+                  <input type="text" name="userEmail" v-model="createdUser.email" placeholder=" Email" required>
+                </div>
+                <div>
+                    <i class="far mar-right fa-1x fa-edit"></i>
+                  <input type="password" name="password" v-model="createdUser.password" placeholder=" Password">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-lg btn-primary"><b>Create User</b></button>
+                <button type="button" class="btn btn-lg btn-secondary" data-dismiss="modal"><b>close</b></button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
       <!-- Button trigger modal -->
       <button type="button" class="btn location-bottom btn-lg btn-nav" data-toggle="modal" data-target="#exampleModal">
         <b>POST</b>
       </button>
-
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -62,7 +96,10 @@
     data() {
       return {
         gram: {},
-        query: ''
+        query: '',
+        createdUser: {
+          createdUser: ''
+        }
       }
     },
     methods: {
@@ -70,6 +107,11 @@
         console.log(gram)
         this.$store.dispatch('createGram', gram)
         this.gram = {}
+        $('#exampleModal').modal('hide')
+      },
+      createUser(userData){
+        this.$store.dispatch('createUser', userData)
+        this.createUser = {}
         $('#exampleModal').modal('hide')
       }
     },
