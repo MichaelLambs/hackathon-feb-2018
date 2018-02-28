@@ -1,6 +1,7 @@
 var router = require('express').Router()
 var Grams = require('../models/gram')
 var Tidbits = require('../models/tidbit')
+var Users = require('../models/user')
 
 
 // HOME PAGE
@@ -14,7 +15,7 @@ router.get('/granolagram/home', (req, res, next) => {
 
 // GET ALL GRAMS BY USER NAME
 router.get('/granolagram/grams/:user', (req, res, next) => {
-    Grams.find({"user":req.params.user})
+    Grams.find({ "user": req.params.user })
         .then(gram => {
             if (!gram) {
                 res.status(400).send({ error: "Invalid Username" })
@@ -26,28 +27,32 @@ router.get('/granolagram/grams/:user', (req, res, next) => {
 
 // GET ALL TIDBITS FROM A GRAM ID
 router.get('/granolagram/grams/:gramId/tidbits', (req, res, next) => {
-    Tidbits.find({"gramId": req.params.gramId})
-    .then(tidbits => {
-        res.send(tidbits)
-    })
-    .catch(next)
+    Tidbits.find({ "gramId": req.params.gramId })
+        .then(tidbits => {
+            res.send(tidbits)
+        })
+        .catch(next)
 })
 
 // CREATE A GRAM
 router.post('/granolagram/home', (req, res, next) => {
     req.body.userId = req.session.uid // GIVES GRAM YOUR USER ID
-    Grams.create(req.body)
-        .then(gram => {
-            res.send(gram)
-        })
-        .catch(next)
+    Users.findById(req.session.uid).then(user => {
+        req.body.user = user.createdUser // req.body is the gram data
+        Grams.create(req.body)
+            .then(gram => {
+                res.send(gram)
+            })
+            .catch(next)
+    })
+    .catch(next)
 })
 
 // EDIT A GRAM BY ID
 router.put('/granolagram/grams/:id', (req, res, next) => {
     Grams.findByIdAndUpdate(req.params.id, req.body)
-    .then(gram => {
-        debugger
+        .then(gram => {
+            debugger
             return res.send(gram)
         })
         .catch(next)

@@ -1,4 +1,4 @@
-var expressSession = require("express-session") // using EXPRESS FRAMEWORK TO CREATE SESSION COOKIES
+var expressSession = require("express-session") // USES EXPRESS FRAMEWORK TO CREATE SESSION COOKIES
 var mongoStore = require("connect-mongodb-session")(expressSession)
 
 // THIS IS WHERE SESSIONS ARE BEING HELD WITHIN SERVER
@@ -16,9 +16,9 @@ store.on("error", function(err) {
 var session = expressSession({
     secret: "all of your granola is belong to m3",
     cookie: {
-        maxAge: (1000 * 60 * 60 * 24 * 7) * 52 // sets cookie age
+        maxAge: (1000 * 60 * 60 * 24 * 7) * 52 // HOW LONG UNTIL NEED TO RE-LOGIN
     },
-    store, // putting it on the mongodb server from uri
+    store, // PUTTING ON MONGO SERVER VIA URI
     resave: true,
     saveUninitialized: true
 

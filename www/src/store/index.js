@@ -1,10 +1,16 @@
 import vue from "vue";
 import vuex from "vuex";
 import axios from "axios";
+//this is allowing us to connect the data
+import router from "../router";
 
 var api = axios.create({
     baseURL: '//localhost:3000/granolagram/',
-    // timeout: 3000
+    withCredentials: true
+});
+var auth = axios.create({
+    baseURL: '//localhost:3000/granolagram/auth/',
+    withCredentials: true
 });
 
 // ALLOWS VUE TO USE VUEX
@@ -18,11 +24,14 @@ export default new vuex.Store({
         tidbits: {}
     },
     mutations: {
+        updateUser(state, payload) {
+            state.user = payload
+        },
         setGram(state, payload) {
             state.grams.unshift(payload)
         },
         setGrams(state, payload) {
-            payload.sort(function(a, b) {
+            payload.sort(function (a, b) {
                 return b.like - a.like;
             })
             state.grams = payload
@@ -80,10 +89,38 @@ export default new vuex.Store({
                     dispatch('getGrams', payload)
                 })
         },
-        createUser({commit, dispatch}, payload) {
+        createUser({ commit, dispatch }, payload) {
             api.post("auth/register", payload)
                 .then(result => {
                     console.log("created user")
+                })
+        },
+
+
+
+        //this logs the user in and redirects them to the Helloworld/homepage
+        login({ commit, dispatch }, payload) {
+            auth.post('login', payload).then(res => {
+                commit('updateUser', res.data.user)
+                router.push({ name: 'HelloWorld' })
+            })
+                .catch(err => {
+                    console.log('Invalid Username or Password')
+                })
+
+        },
+        authenticate({ commit, dispatch }) {
+            auth.get('authenticate').then(res => {
+                commit('updateUser', res.data)
+            })
+                .catch(err => {
+                    console.log(err);
+                })
+        },
+        logout({ commit, dispatch }, payload) {
+            auth.delete('logout')
+                .then(res => {
+                    commit('updateUser', {})
                 })
         }
     }

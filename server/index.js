@@ -11,7 +11,16 @@ let authRoutes = require('./server-assets/auth/routes')
 let gramRoutes = require('./server-assets/routes/grams')
 let tidbitRoutes = require('./server-assets/routes/tidbits')
 
-server.use(cors())
+var whitelist = ['http://localhost:8080']
+var corsOptions = {
+    origin: function(origin, callback){
+        var originIsWhiteListed = whitelist.indexOf(origin) !== -1;
+        callback(null, originIsWhiteListed);
+    },
+    credentials: true
+}
+
+server.use(cors(corsOptions))
 server.use(session)
 server.use(bp.json())
 server.use(bp.urlencoded({ extended: true }))

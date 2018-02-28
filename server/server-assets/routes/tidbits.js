@@ -1,6 +1,6 @@
 var router = require('express').Router()
 var Tidbits = require('../models/tidbit')
-
+var Users = require('../models/user')
 
 
 // GET ALL TIDBITS BY USER NAME
@@ -17,10 +17,19 @@ router.get('/granolagram/tidbits/:user', (req, res, next) => {
 
 // CREATE A TIDBIT
 router.post('/granolagram/tidbits', (req, res, next) => {
-    Tidbits.create(req.body)
-        .then(tidbit => {
-            return res.send(tidbit)
-        })
+    req.body.userId = req.session.uid // GIVES GRAM YOUR USER ID
+    Users.findById(req.session.uid).then(user => {
+        req.body.user = user.createdUser // req.body is the gram data
+        Tidbits.create(req.body)
+            .then(gram => {
+                res.send(gram)
+            })
+            .catch(next)
+    })
+    // Tidbits.create(req.body)
+    //     .then(tidbit => {
+    //         return res.send(tidbit)
+    //     })
         .catch(next)
 })
 
